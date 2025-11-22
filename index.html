@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Offline mobile app with calculator and notes">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <title>CalcNotes</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Tab Navigation -->
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tab="calculator" aria-label="Calculator">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                    <line x1="8" y1="6" x2="16" y2="6"></line>
+                    <line x1="8" y1="10" x2="16" y2="10"></line>
+                    <line x1="8" y1="14" x2="10" y2="14"></line>
+                    <line x1="14" y1="14" x2="16" y2="14"></line>
+                    <line x1="8" y1="18" x2="10" y2="18"></line>
+                    <line x1="14" y1="18" x2="16" y2="18"></line>
+                </svg>
+                <span>Calculator</span>
+            </button>
+            <button class="tab-btn" data-tab="notes" aria-label="Notes">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                </svg>
+                <span>Notes</span>
+            </button>
+        </nav>
+
+        <!-- Calculator Tab Content -->
+        <div class="tab-content active" id="calculator">
+            <div class="calculator-container">
+                <!-- Calculator Header -->
+                <div class="calc-header">
+                    <button class="mode-toggle" id="modeToggle">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M8 12h8"></path>
+                            <path d="M12 8v8"></path>
+                        </svg>
+                        <span id="modeText">Scientific</span>
+                    </button>
+                    <button class="angle-toggle" id="angleToggle">
+                        <span id="angleMode">DEG</span>
+                    </button>
+                </div>
+
+                <!-- Calculator Display -->
+                <div class="calc-display">
+                    <div class="calc-expression" id="expression"></div>
+                    <div class="calc-result" id="result">0</div>
+                </div>
+
+                <!-- Memory Display -->
+                <div class="memory-display" id="memoryDisplay" style="display: none;">
+                    <span>Memory: <strong id="memoryValue">0</strong></span>
+                </div>
+
+                <!-- Scientific Functions (Hidden by default) -->
+                <div class="calc-scientific" id="scientificPanel" style="display: none;">
+                    <button class="btn btn-function" data-action="sin">sin</button>
+                    <button class="btn btn-function" data-action="cos">cos</button>
+                    <button class="btn btn-function" data-action="tan">tan</button>
+                    <button class="btn btn-function" data-action="log">log</button>
+                    <button class="btn btn-function" data-action="ln">ln</button>
+                    <button class="btn btn-function" data-action="sqrt">√</button>
+                    <button class="btn btn-function" data-action="square">x²</button>
+                    <button class="btn btn-function" data-action="cube">x³</button>
+                    <button class="btn btn-function" data-action="power">xʸ</button>
+                    <button class="btn btn-function" data-action="exp">eˣ</button>
+                    <button class="btn btn-function" data-action="factorial">n!</button>
+                    <button class="btn btn-function" data-action="pi">π</button>
+                    <button class="btn btn-function" data-action="e">e</button>
+                    <button class="btn btn-function" data-action="inv">1/x</button>
+                </div>
+
+                <!-- Calculator Buttons -->
+                <div class="calc-buttons">
+                    <!-- Memory Row -->
+                    <button class="btn btn-memory" data-action="mc">MC</button>
+                    <button class="btn btn-memory" data-action="mr">MR</button>
+                    <button class="btn btn-memory" data-action="m+">M+</button>
+                    <button class="btn btn-memory" data-action="m-">M-</button>
+
+                    <!-- Number Pad & Operations -->
+                    <button class="btn btn-clear" data-action="clear">C</button>
+                    <button class="btn btn-operator" data-action="backspace">⌫</button>
+                    <button class="btn btn-operator" data-action="%">%</button>
+                    <button class="btn btn-operator" data-action="/">÷</button>
+
+                    <button class="btn btn-number" data-value="7">7</button>
+                    <button class="btn btn-number" data-value="8">8</button>
+                    <button class="btn btn-number" data-value="9">9</button>
+                    <button class="btn btn-operator" data-action="*">×</button>
+
+                    <button class="btn btn-number" data-value="4">4</button>
+                    <button class="btn btn-number" data-value="5">5</button>
+                    <button class="btn btn-number" data-value="6">6</button>
+                    <button class="btn btn-operator" data-action="-">−</button>
+
+                    <button class="btn btn-number" data-value="1">1</button>
+                    <button class="btn btn-number" data-value="2">2</button>
+                    <button class="btn btn-number" data-value="3">3</button>
+                    <button class="btn btn-operator" data-action="+">+</button>
+
+                    <button class="btn btn-number btn-zero" data-value="0">0</button>
+                    <button class="btn btn-number" data-value=".">.</button>
+                    <button class="btn btn-equals" data-action="=">=</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes Tab Content -->
+        <div class="tab-content" id="notes">
+            <div class="notes-container">
+                <!-- Notes Header -->
+                <div class="notes-header">
+                    <div class="search-container">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <input type="text" class="search-input" id="searchInput" placeholder="Search notes..." autocomplete="off">
+                    </div>
+                    <button class="btn-new-note" id="newNoteBtn" aria-label="New Note">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Notes List -->
+                <div class="notes-list" id="notesList">
+                    <!-- Notes will be dynamically inserted here -->
+                    <div class="empty-state" id="emptyState">
+                        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="12" y1="18" x2="12" y2="12"></line>
+                            <line x1="9" y1="15" x2="15" y2="15"></line>
+                        </svg>
+                        <p>No notes yet</p>
+                        <span>Tap + to create your first note</span>
+                    </div>
+                </div>
+
+                <!-- Note Editor (Hidden by default) -->
+                <div class="note-editor" id="noteEditor" style="display: none;">
+                    <div class="editor-header">
+                        <button class="btn-back" id="backBtn" aria-label="Back">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                            </svg>
+                        </button>
+                        <div class="editor-actions">
+                            <button class="btn-icon" id="pinBtn" aria-label="Pin Note">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 17v5M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>
+                                </svg>
+                            </button>
+                            <button class="btn-icon" id="deleteBtn" aria-label="Delete Note">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="text" class="note-title" id="noteTitle" placeholder="Note Title" autocomplete="off">
+                    <textarea class="note-content" id="noteContent" placeholder="Start typing..."></textarea>
+                    <div class="note-meta" id="noteMeta">
+                        <span class="meta-text">Created: <time id="createdDate"></time></span>
+                        <span class="meta-text">Modified: <time id="modifiedDate"></time></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="calculator.js"></script>
+    <script src="notes.js"></script>
+    <script>
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }
+
+        // Tab Switching
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.dataset.tab;
+                
+                // Remove active class from all tabs
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                button.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
