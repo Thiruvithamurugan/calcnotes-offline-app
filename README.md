@@ -2,6 +2,8 @@
 
 A fully offline mobile Progressive Web App (PWA) combining a dual-mode calculator and smart notes functionality.
 
+https://tmcalcnote.netlify.app/
+
 ![CalcNotes App](icon-512.png)
 
 ## ✨ Features
